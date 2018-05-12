@@ -1,3 +1,4 @@
+'use strict'; // for node 4
 const hydrogen = require('../build/Release/node-libhydrogen-binding');
 const expect = require('chai').expect;
 require('mocha');

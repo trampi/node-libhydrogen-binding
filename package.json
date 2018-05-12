@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "npm install && npm run test",
-    "test": "mocha --reporter spec",
+    "test": "mocha --reporter spec --use_strict",
     "install": "node-gyp rebuild"
   },
   "repository": {

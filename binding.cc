@@ -1,6 +1,6 @@
 #include <nan.h>
 
-#include "binding.h";
+#include "binding.h"
 
 using namespace v8;
 
