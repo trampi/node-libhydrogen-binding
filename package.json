@@ -1,0 +1,27 @@
+{
+  "name": "node-libhydrogen-native",
+  "version": "0.0.1",
+  "description": "Bindings for libhydrogen",
+  "main": "index.js",
+  "dependencies": {
+    "nan": "^2.10.0",
+    "node-gyp": "^3.6.2"
+  },
+  "devDependencies": {
+    "bindings": "^1.3.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.1.1"
+  },
+  "scripts": {
+    "build": "npm install && npm run test",
+    "test": "mocha --reporter spec",
+    "install": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trampi/node-libhydrogen-binding.git"
+  },
+  "author": "Fabian Beier-Trampusch",
+  "license": "ISC",
+  "gypfile": true
+}
