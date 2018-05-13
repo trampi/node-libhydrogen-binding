@@ -86,7 +86,7 @@ NAN_METHOD(_hydro_secretbox_encrypt) {
   }
 
 
-  std::string message = local_string_to_string(info[0]->ToString());
+  std::string message(local_string_to_string(info[0]->ToString()));
 
   Local<Uint8Array> keyLocal = info[1].As<Uint8Array>();
   Nan::TypedArrayContents<uint8_t> keyBuffer(keyLocal);
@@ -96,7 +96,7 @@ NAN_METHOD(_hydro_secretbox_encrypt) {
   }
 
   uint64_t msgid = info[2]->NumberValue();
-  std::string context = local_string_to_string(info[3]->ToString());
+  std::string context(local_string_to_string(info[3]->ToString()));
 
   if (context.length() != hydro_secretbox_CONTEXTBYTES) {
     const char* error = std::string("invalid context length").c_str();
@@ -163,7 +163,7 @@ NAN_METHOD(_hydro_secretbox_decrypt) {
   }
 
   uint64_t msgid = info[2]->NumberValue();
-  std::string context = local_string_to_string(info[3]->ToString());
+  std::string context(local_string_to_string(info[3]->ToString()));
 
   if (context.length() != hydro_secretbox_CONTEXTBYTES) {
     const char* error = std::string("invalid context length").c_str();
@@ -182,6 +182,8 @@ NAN_METHOD(_hydro_secretbox_decrypt) {
   }
 
   std::string resultstr((char*) decrypted, decrypted_len);
+  delete decrypted;
+
   info.GetReturnValue().Set(String::NewFromUtf8(isolate, resultstr.c_str()));
 }
 
