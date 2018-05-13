@@ -8,12 +8,12 @@
 
 # Usage example
 Install *node-libhydrogen-binding* as any other package:
-```
-> npm install node-libhydrogen-binding
+```bash
+npm install node-libhydrogen-binding
 ```
 
 You can use it for encrypting and decrypting payload:
-```
+```javascript
 const hydrogen = require('node-libhydrogen-binding');
 hydrogen.init();
 
@@ -30,9 +30,8 @@ const plaintext = hydrogen.secretbox_decrypt(ciphertext, key, msgId, context)
 ```
 
 
-# API Documentation
-*coming soon*
-
+# [API Documentation](https://github.com/trampi/node-libhydrogen-binding/wiki)
+[Check the wiki](https://github.com/trampi/node-libhydrogen-binding/wiki)
 
 # Building
 * `npm install --global --production windows-build-tools` (windows only)

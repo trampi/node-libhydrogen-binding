@@ -44,6 +44,10 @@ NAN_GETTER(_hydro_secretbox_KEYBYTES) {
   info.GetReturnValue().Set(hydro_secretbox_KEYBYTES);
 }
 
+NAN_GETTER(_hydro_secretbox_HEADERBYTES) {
+  info.GetReturnValue().Set(hydro_secretbox_HEADERBYTES);
+}
+
 NAN_METHOD(_hydro_secretbox_encrypt) {
   Isolate* isolate = info.GetIsolate();
 
@@ -187,6 +191,7 @@ NAN_MODULE_INIT(Initialize) {
   Nan::Export(target, "random_uniform", _hydro_random_uniform);
   Nan::Export(target, "secretbox_keygen", _hydro_secretbox_keygen);
   Nan::SetAccessor(target, Nan::New("secretbox_keybytes_size").ToLocalChecked(), _hydro_secretbox_KEYBYTES);
+  Nan::SetAccessor(target, Nan::New("secretbox_headerbytes_size").ToLocalChecked(), _hydro_secretbox_HEADERBYTES);
   Nan::Export(target, "secretbox_encrypt", _hydro_secretbox_encrypt);
   Nan::Export(target, "secretbox_decrypt", _hydro_secretbox_decrypt);
 }

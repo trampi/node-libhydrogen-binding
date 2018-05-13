@@ -68,6 +68,10 @@ describe('hydrogen.secretbox_encrypt', () => {
         expect(hydrogen.secretbox_keybytes_size).to.eq(32);
     });
 
+    it('should expose the constant for headerbytes length', () => {
+        expect(hydrogen.secretbox_headerbytes_size).to.eq(36);
+    });
+
     it('should encrypt something', () => {
         const ciphertext = hydrogen.secretbox_encrypt(msg, key, msgId, context);
         expect(ciphertext).to.be.instanceof(Buffer);
