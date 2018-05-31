@@ -1,5 +1,5 @@
 {
-  "name": "node-libhydrogen-native",
+  "name": "node-libhydrogen-binding",
   "version": "0.0.1",
   "description": "Bindings for libhydrogen",
   "main": "index.js",
