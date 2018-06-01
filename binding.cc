@@ -182,8 +182,15 @@ NAN_METHOD(_hydro_secretbox_decrypt) {
     return;
   }
 
-  size_t decrypted_len = ciphertext.length() - hydro_secretbox_HEADERBYTES;
-  uint8_t * decrypted = new uint8_t[decrypted_len + 1];
+  int decrypted_len = ciphertext.length() - hydro_secretbox_HEADERBYTES;
+
+  if (decrypted_len <= 0) {
+    isolate->ThrowException(Nan::TypeError(
+        String::NewFromUtf8(isolate, "invalid decrypted size length")));
+    return;
+  }
+
+  uint8_t * decrypted = new uint8_t[decrypted_len];
   int decryption_result = hydro_secretbox_decrypt(decrypted, *ciphertext, ciphertext.length(), msgid, context.c_str(), *keyBuffer);
   std::string resultstr((char*) decrypted, decrypted_len);
   delete decrypted;

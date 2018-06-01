@@ -65,6 +65,7 @@ describe('secret key encryption', () => {
     const context = "testtest";
     const invalidContext = "invalid context";
     const keyWithInvalidSize = Buffer.alloc(5);
+    const validCiphertext = hydrogen.secretbox_encrypt(msg, key, msgId, context);
 
     describe('hydrogen.secretbox_encrypt', () => {
 
@@ -99,10 +100,16 @@ describe('secret key encryption', () => {
 
         it('should detect invalid context lengths', () => {
             expect(() => hydrogen.secretbox_encrypt(msg, key, msgId, invalidContext)).to.throw();
+            expect(() => hydrogen.secretbox_decrypt(validCiphertext, key, msgId, invalidContext)).to.throw();
         });
 
         it('should detect invalid keys', () => {
-            expect(() => hydrogen.secretbox_encrypt(msg, new Uint8Array(5), msgId, "test")).to.throw();
+            expect(() => hydrogen.secretbox_encrypt(msg, new Uint8Array(5), msgId, context)).to.throw();
+            expect(() => hydrogen.secretbox_decrypt(validCiphertext, new Uint8Array(5), msgId, context)).to.throw();
+        });
+
+        it('should detect invalid content length', () => {
+            expect(() => hydrogen.secretbox_decrypt(new Uint8Array(2), key, msgId, context)).to.throw();
         });
 
     });
