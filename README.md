@@ -34,6 +34,7 @@ const plaintext = hydrogen.secretbox_decrypt(ciphertext, key, msgId, context)
 [Check the wiki](https://github.com/trampi/node-libhydrogen-binding/wiki)
 
 # Building
+* `git submodule update --init`
 * `npm install --global --production windows-build-tools` (windows only)
 * `npm run build` 
 

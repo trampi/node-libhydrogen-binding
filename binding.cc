@@ -30,7 +30,9 @@ NAN_METHOD(_hydro_random_uniform) {
     return;
   }
 
-  info.GetReturnValue().Set(hydro_random_uniform(info[0]->NumberValue()));
+  uint32_t upperBound = info[0]->ToInt32(Nan::GetCurrentContext()).ToLocalChecked()->Value();
+
+  info.GetReturnValue().Set(hydro_random_uniform(upperBound));
 }
 
 NAN_METHOD(_hydro_secretbox_keygen) {
@@ -93,8 +95,8 @@ NAN_METHOD(_hydro_secretbox_encrypt) {
     return;
   }
 
-
-  std::string message(local_string_to_string(info[0]->ToString()));
+  auto msgLocal = info[0]->ToString(Nan::GetCurrentContext());
+  std::string message(local_string_to_string(msgLocal.ToLocalChecked()));
 
   Local<Uint8Array> keyLocal = info[1].As<Uint8Array>();
   Nan::TypedArrayContents<uint8_t> keyBuffer(keyLocal);
@@ -104,8 +106,8 @@ NAN_METHOD(_hydro_secretbox_encrypt) {
     return;
   }
 
-  uint64_t msgid = info[2]->NumberValue();
-  std::string context(local_string_to_string(info[3]->ToString()));
+  uint32_t msgid = info[2]->Uint32Value(Nan::GetCurrentContext()).ToChecked();
+  std::string context(local_string_to_string(info[3]->ToString(Nan::GetCurrentContext()).ToLocalChecked()));
 
   if (context.length() != hydro_secretbox_CONTEXTBYTES) {
     const char* error = std::string("invalid context length").c_str();
@@ -172,8 +174,8 @@ NAN_METHOD(_hydro_secretbox_decrypt) {
     return;
   }
 
-  uint64_t msgid = info[2]->NumberValue();
-  std::string context(local_string_to_string(info[3]->ToString()));
+  uint32_t msgid = info[2]->Uint32Value(Nan::GetCurrentContext()).ToChecked();
+  std::string context(local_string_to_string(info[3]->ToString(Nan::GetCurrentContext()).ToLocalChecked()));
 
   if (context.length() != hydro_secretbox_CONTEXTBYTES) {
     const char* error = std::string("invalid context length").c_str();
@@ -239,7 +241,7 @@ NAN_METHOD(_hydro_secretbox_probe_create) {
   Local<Uint8Array> ciphertextLocal = info[0].As<Uint8Array>();
   Nan::TypedArrayContents<uint8_t> ciphertext(ciphertextLocal);
 
-  std::string context(local_string_to_string(info[1]->ToString()));
+  std::string context(local_string_to_string(info[1]->ToString(Nan::GetCurrentContext()).ToLocalChecked()));
   if (context.length() != hydro_secretbox_CONTEXTBYTES) {
     const char* error = std::string("invalid context length").c_str();
     isolate->ThrowException(Nan::TypeError(
@@ -311,7 +313,7 @@ NAN_METHOD(_hydro_secretbox_probe_verify) {
   Local<Uint8Array> ciphertextLocal = info[1].As<Uint8Array>();
   Nan::TypedArrayContents<uint8_t> ciphertext(ciphertextLocal);
 
-  std::string context(local_string_to_string(info[2]->ToString()));
+  std::string context(local_string_to_string(info[2]->ToString(Nan::GetCurrentContext()).ToLocalChecked()));
   if (context.length() != hydro_secretbox_CONTEXTBYTES) {
     const char* error = std::string("invalid context length").c_str();
     isolate->ThrowException(Nan::TypeError(
@@ -363,7 +365,7 @@ std::string get_constructor_name(v8::Local<v8::Value> val) {
   } else if(val->IsUndefined()) {
     return "(undefined)";
   } else if(val->IsObject()) {
-    auto constructorV8String = val->ToObject()->GetConstructorName();
+    auto constructorV8String = val->ToObject(Nan::GetCurrentContext()).ToLocalChecked()->GetConstructorName();
     auto constructorName = local_string_to_string(constructorV8String);
     return constructorName;
   } else {
@@ -371,14 +373,16 @@ std::string get_constructor_name(v8::Local<v8::Value> val) {
   }
 }
 
-std::string local_string_to_string(Local<String> val) {
-    String::Utf8Value utf8value(val);
-    return std::string(*utf8value);
+std::string local_string_to_string(MaybeLocal<String> val) {
+  Local<String> localString = val.ToLocalChecked();
+  Isolate* isolate = Nan::GetCurrentContext()->GetIsolate();
+  String::Utf8Value utf8value(isolate, localString);
+  return std::string(*utf8value);
 }
 
 void dbg(void* arr, size_t len, char* text) {
   printf("{ %s: ", text);
-  for (int i = 0; i < len; i++) {
+  for (uint32_t i = 0; i < len; i++) {
     printf("%02x ", ((uint8_t*)arr)[i]);
   }
   printf("}\n\n");
