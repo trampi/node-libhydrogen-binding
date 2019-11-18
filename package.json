@@ -1,6 +1,6 @@
 {
   "name": "node-libhydrogen-binding",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Bindings for libhydrogen",
   "main": "index.js",
   "dependencies": {
